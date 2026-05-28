@@ -15,10 +15,6 @@ const PYTHIAN_OPS_MULTISIG = "GAdn7TZhszf5KTfwNRx3A2nP6KCRFEWucZubgdEqbJA2";
 const USDC_MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 const PYTH_MINT = "HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3";
 
-// Revenue split percentages
-const DAO_SHARE = 0.6;  // 60% goes to Pyth DAO
-const DOURO_SHARE = 0.4; // 40% kept by Douro Labs
-
 const fetch = async (_t: any, _a: any, options: FetchOptions) => {
   const dailyRevenue = options.createBalances();
   const dailyFees = options.createBalances();
@@ -70,9 +66,9 @@ const fetch = async (_t: any, _a: any, options: FetchOptions) => {
   `;
 
   const purchasesRes = await queryDuneSql(options, purchasesQuery);
-  const purchasesAmount = purchasesRes[0]?.total_amount || 0;
+  const purchasesAmount = BigInt(purchasesRes[0]?.total_amount || 0);
 
-  if (purchasesAmount > 0) {
+  if (purchasesAmount > 0n) {
     dailyHoldersRevenue.add(PYTH_MINT, purchasesAmount);
   }
 
